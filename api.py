@@ -28,7 +28,7 @@ def predict():
     scaler = pickle.load(open(r"Models/scaler.pkl", "rb"))
     cv = pickle.load(open(r"Models/countVectorizer.pkl", "rb"))
     try:
-        genai.configure(api_key="AIzaSyCH4NpJTeQTW93mIbmZ5GWheVN7y5Mq94w");model = genai.GenerativeModel("gemini-1.5-flash");text_input = request.json["text"];response = model.generate_content("follow this strict format: 1.good or bad nextline  2. 'stock will go __ ' what will be the effect on stockprice market stock will go up or stock will go down and by how much assumeing it will impact some stock,thats it as response return whether the news is good or bad: also remove the numbers 1 2 3 just values"+text_input)
+        genai.configure(api_key="-");model = genai.GenerativeModel("gemini-1.5-flash");text_input = request.json["text"];response = model.generate_content("follow this strict format: 1.good or bad nextline  2. 'stock will go __ ' what will be the effect on stockprice market stock will go up or stock will go down and by how much assumeing it will impact some stock,thats it as response return whether the news is good or bad: also remove the numbers 1 2 3 just values"+text_input)
         print(response.text)
         # Single string prediction
         print(text_input)
