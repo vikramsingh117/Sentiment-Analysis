@@ -28,7 +28,7 @@ def predict():
     scaler = pickle.load(open(r"Models/scaler.pkl", "rb"))
     cv = pickle.load(open(r"Models/countVectorizer.pkl", "rb"))
     try:
-        genai.configure(api_key="AIzaSyCt6I3_PyyhO8MBRqi7TsFWjxYocFELMME");
+        genai.configure(api_key="-");
         model = genai.GenerativeModel("gemini-1.5-flash");text_input = request.json["text"];response = model.generate_content("Provide the response in this exact numbered format with no additional formatting or extra words: ""1. Good or Bad ""2. 'Stock will go __' up/down ""3. Topic-related stock name with a brief note on how it will perform: "+ text_input)
 
         # print(response.text)
