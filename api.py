@@ -24,17 +24,37 @@ def home():
 @app.route("/predict", methods=["POST"])
 def predict():
     # Select the predictor to be loaded from Models folder
-    predictor = pickle.load(open(r"Models/model_xgb.pkl", "rb"))
+    predictor = pickle.load(open(r"Models/model_rf.pkl", "rb"))
     scaler = pickle.load(open(r"Models/scaler.pkl", "rb"))
     cv = pickle.load(open(r"Models/countVectorizer.pkl", "rb"))
     try:
-        genai.configure(api_key="-");model = genai.GenerativeModel("gemini-1.5-flash");text_input = request.json["text"];response = model.generate_content("follow this strict format: 1.good or bad nextline  2. 'stock will go __ ' what will be the effect on stockprice market stock will go up or stock will go down and by how much assumeing it will impact some stock,thats it as response return whether the news is good or bad: also remove the numbers 1 2 3 just values"+text_input)
-        print(response.text)
-        # Single string prediction
-        print(text_input)
-        predicted_sentiment = single_prediction(predictor, scaler, cv, text_input)
+        genai.configure(api_key="AIzaSyCt6I3_PyyhO8MBRqi7TsFWjxYocFELMME");
+        model = genai.GenerativeModel("gemini-1.5-flash");text_input = request.json["text"];response = model.generate_content("Provide the response in this exact numbered format with no additional formatting or extra words: ""1. Good or Bad ""2. 'Stock will go __' up/down ""3. Topic-related stock name with a brief note on how it will perform: "+ text_input)
 
-        return jsonify({"prediction": response.text})
+        # print(response.text)
+
+        response_text = response.text.strip()
+
+        # Split the response by numbered sections
+        sections = response_text.split("\n")  # Assuming each item appears on a new line
+
+        # Assign values based on expected numbering
+        sentiment = sections[0].replace("1. ", "").strip() if len(sections) > 0 else None
+        stock_direction = sections[1].replace("2. Stock will go ", "").strip() if len(sections) > 1 else None
+        stock_name_performance = sections[2].replace("3. ", "").strip() if len(sections) > 2 else None
+
+        # Print or log the extracted data (optional)
+        print("model result")
+        print(f"Sentiment: {sentiment}")
+        print(f"Stock Direction: {stock_direction}")
+        # print(f"Stock Name and Performance: {stock_name_performance}")
+
+        return jsonify({
+            "sentiment": sentiment,
+            "stock_direction": "stock will go: "+stock_direction[3:],
+            "stock_name_performance": stock_name_performance,
+            "full_response": response_text
+        })
 
     except Exception as e:
         return jsonify({"error": str(e)})

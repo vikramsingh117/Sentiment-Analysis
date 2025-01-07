@@ -3,7 +3,6 @@ import pandas as pd
 import requests
 from io import BytesIO
 
-# flask --app api.py run --port=5000
 prediction_endpoint = "http://127.0.0.1:5000/predict"
 
 st.title("Text Sentiment Predictor")
@@ -13,10 +12,8 @@ uploaded_file = st.file_uploader(
     type="csv",
 )
 
-# Text input for sentiment prediction
 user_input = st.text_input("Enter text and click on Predict", "")
 
-# Prediction on single sentence
 if st.button("Predict"):
     if uploaded_file is not None:
         file = {"file": uploaded_file}
